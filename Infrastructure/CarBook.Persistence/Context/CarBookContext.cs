@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-using UdemyCarBook.Domain.Entities;
+
 
 namespace CarBook.Persistence.Context
 {

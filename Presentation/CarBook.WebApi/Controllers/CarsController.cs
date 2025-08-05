@@ -3,7 +3,6 @@ using CarBook.Application.Features.CQRS.Handlers.CarHandlers;
 using CarBook.Application.Features.CQRS.Queries.CarQueries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using UdemyCarBook.Application.Features.CQRS.Handlers.CarHandlers;
 
 namespace CarBook.WebApi.Controllers
 {

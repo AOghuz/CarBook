@@ -183,7 +183,7 @@ namespace CarBook.Persistence.Migrations
                     b.ToTable("Features");
                 });
 
-            modelBuilder.Entity("UdemyCarBook.Domain.Entities.About", b =>
+            modelBuilder.Entity("CarBook.Domain.Entities.About", b =>
                 {
                     b.Property<int>("AboutID")
                         .ValueGeneratedOnAdd()
@@ -208,7 +208,7 @@ namespace CarBook.Persistence.Migrations
                     b.ToTable("Abouts");
                 });
 
-            modelBuilder.Entity("UdemyCarBook.Domain.Entities.CarPricing", b =>
+            modelBuilder.Entity("CarBook.Domain.Entities.CarPricing", b =>
                 {
                     b.Property<int>("CarPricingID")
                         .ValueGeneratedOnAdd()
@@ -234,7 +234,7 @@ namespace CarBook.Persistence.Migrations
                     b.ToTable("CarPricings");
                 });
 
-            modelBuilder.Entity("UdemyCarBook.Domain.Entities.Category", b =>
+            modelBuilder.Entity("CarBook.Domain.Entities.Category", b =>
                 {
                     b.Property<int>("CategoryID")
                         .ValueGeneratedOnAdd()
@@ -251,7 +251,7 @@ namespace CarBook.Persistence.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("UdemyCarBook.Domain.Entities.Contact", b =>
+            modelBuilder.Entity("CarBook.Domain.Entities.Contact", b =>
                 {
                     b.Property<int>("ContactID")
                         .ValueGeneratedOnAdd()
@@ -283,7 +283,7 @@ namespace CarBook.Persistence.Migrations
                     b.ToTable("Contacts");
                 });
 
-            modelBuilder.Entity("UdemyCarBook.Domain.Entities.FooterAddress", b =>
+            modelBuilder.Entity("CarBook.Domain.Entities.FooterAddress", b =>
                 {
                     b.Property<int>("FooterAddressID")
                         .ValueGeneratedOnAdd()
@@ -312,7 +312,7 @@ namespace CarBook.Persistence.Migrations
                     b.ToTable("FooterAddresses");
                 });
 
-            modelBuilder.Entity("UdemyCarBook.Domain.Entities.Location", b =>
+            modelBuilder.Entity("CarBook.Domain.Entities.Location", b =>
                 {
                     b.Property<int>("LocationID")
                         .ValueGeneratedOnAdd()
@@ -329,7 +329,7 @@ namespace CarBook.Persistence.Migrations
                     b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("UdemyCarBook.Domain.Entities.Pricing", b =>
+            modelBuilder.Entity("CarBook.Domain.Entities.Pricing", b =>
                 {
                     b.Property<int>("PricingID")
                         .ValueGeneratedOnAdd()
@@ -346,7 +346,7 @@ namespace CarBook.Persistence.Migrations
                     b.ToTable("Pricings");
                 });
 
-            modelBuilder.Entity("UdemyCarBook.Domain.Entities.Service", b =>
+            modelBuilder.Entity("CarBook.Domain.Entities.Service", b =>
                 {
                     b.Property<int>("ServiceID")
                         .ValueGeneratedOnAdd()
@@ -371,7 +371,7 @@ namespace CarBook.Persistence.Migrations
                     b.ToTable("Services");
                 });
 
-            modelBuilder.Entity("UdemyCarBook.Domain.Entities.SocialMedia", b =>
+            modelBuilder.Entity("CarBook.Domain.Entities.SocialMedia", b =>
                 {
                     b.Property<int>("SocialMediaID")
                         .ValueGeneratedOnAdd()
@@ -396,7 +396,7 @@ namespace CarBook.Persistence.Migrations
                     b.ToTable("SocialMedias");
                 });
 
-            modelBuilder.Entity("UdemyCarBook.Domain.Entities.Testimonial", b =>
+            modelBuilder.Entity("CarBook.Domain.Entities.Testimonial", b =>
                 {
                     b.Property<int>("TestimonialID")
                         .ValueGeneratedOnAdd()
@@ -466,7 +466,7 @@ namespace CarBook.Persistence.Migrations
                     b.Navigation("Feature");
                 });
 
-            modelBuilder.Entity("UdemyCarBook.Domain.Entities.CarPricing", b =>
+            modelBuilder.Entity("CarBook.Domain.Entities.CarPricing", b =>
                 {
                     b.HasOne("CarBook.Domain.Entities.Car", "Car")
                         .WithMany("CarPricings")
@@ -474,7 +474,7 @@ namespace CarBook.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UdemyCarBook.Domain.Entities.Pricing", "Pricing")
+                    b.HasOne("CarBook.Domain.Entities.Pricing", "Pricing")
                         .WithMany("CarPricings")
                         .HasForeignKey("PricingID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -504,7 +504,7 @@ namespace CarBook.Persistence.Migrations
                     b.Navigation("CarFeatures");
                 });
 
-            modelBuilder.Entity("UdemyCarBook.Domain.Entities.Pricing", b =>
+            modelBuilder.Entity("CarBook.Domain.Entities.Pricing", b =>
                 {
                     b.Navigation("CarPricings");
                 });

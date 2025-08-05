@@ -7,9 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UdemyCarBook.Domain.Entities;
 
-namespace UdemyCarBook.Application.Features.CQRS.Handlers.CarHandlers
+namespace CarBook.Application.Features.CQRS.Handlers.CarHandlers
 {
     public class GetCarByIdQueryHandler
     {

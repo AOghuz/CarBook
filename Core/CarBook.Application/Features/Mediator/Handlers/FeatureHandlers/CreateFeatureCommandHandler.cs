@@ -18,12 +18,10 @@ namespace CarBook.Application.Features.Mediator.Handlers.FeatureHandlers
             _repository = repository;
         }
 
-        public async Task Handle(CreateFeatureCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CreateFeatureCommand request, CancellationToken cancellationToken)
         {
-            await _repository.CreateAsync(new Feature
-            {
-                Name = request.Name
-            });
+            await _repository.CreateAsync(new Feature { Name = request.Name });
+            return Unit.Value;
         }
     }
 }
