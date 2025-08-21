@@ -28,7 +28,7 @@ namespace CarBook.WebUI.ViewComponents.DefaultViewComponents
             #endregion
 
             #region İstatistik2
-            var responseMessage2 = await client.GetAsync("https://localhost:7060/api/Statistics/GetLocationCount");
+            var responseMessage2 = await client.GetAsync("https://localhost:7268/api/Statistics/GetLocationCount");
             if (responseMessage2.IsSuccessStatusCode)
             {
                 var jsonData2 = await responseMessage2.Content.ReadAsStringAsync();
@@ -38,7 +38,7 @@ namespace CarBook.WebUI.ViewComponents.DefaultViewComponents
             #endregion
 
             #region İstatistik3
-            var responseMessage3 = await client.GetAsync("https://localhost:7060/api/Statistics/GetBrandCount");
+            var responseMessage3 = await client.GetAsync("https://localhost:7268/api/Statistics/GetBrandCount");
             if (responseMessage3.IsSuccessStatusCode)
             {
                 var jsonData3 = await responseMessage3.Content.ReadAsStringAsync();
@@ -48,7 +48,7 @@ namespace CarBook.WebUI.ViewComponents.DefaultViewComponents
             #endregion
 
             #region İstatistik4
-            var responseMessage4 = await client.GetAsync("https://localhost:7060/api/Statistics/GetCarCountByFuelElectric");
+            var responseMessage4 = await client.GetAsync("https://localhost:7268/api/Statistics/GetCarCountByFuelElectric");
             if (responseMessage4.IsSuccessStatusCode)
             {
                 var jsonData4 = await responseMessage4.Content.ReadAsStringAsync();

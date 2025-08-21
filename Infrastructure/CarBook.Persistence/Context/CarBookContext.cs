@@ -17,6 +17,8 @@ namespace CarBook.Persistence.Context
             optionsBuilder.UseSqlServer("server= DESKTOP-SCO6T6L\\SQLEXPRESS; database=CarBookDB;Trusted_Connection=True; integrated security=true; TrustServerCertificate=True;");
         }
         public DbSet<About> Abouts { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<Banner> Banners { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Car> Cars { get; set; }
@@ -36,6 +38,23 @@ namespace CarBook.Persistence.Context
         public DbSet<Author> Authors { get; set; }
         public DbSet<TagCloud> TagClouds { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<RentACar> RentACars { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Reservation>()
+                .HasOne(x => x.PickUpLocation)
+                .WithMany(y => y.PickUpReservation)
+                .HasForeignKey(z => z.PickUpLocationID)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(x => x.DropOffLocation)
+                .WithMany(y => y.DropOffReservation)
+                .HasForeignKey(z => z.DropOffLocationID)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        }
 
     }
 }

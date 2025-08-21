@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CarBook.Application.Interfaces.CarPricingInterfaces;
 using CarBook.Persistence.Context;
 using CarBook.Domain.Entities;
+using CarBook.Application.ViewModels;
 
 namespace CarBook.Persistence.Repositories.CarPricingRepositories
 {
@@ -22,8 +23,56 @@ namespace CarBook.Persistence.Repositories.CarPricingRepositories
             var values = _context.CarPricings.Include(x => x.Car).ThenInclude(y => y.Brand).Include(x => x.Pricing).Where(z => z.PricingID == 2).ToList();
             return values;
         }
+        public List<CarPricing> GetCarPricingWithTimePeriod()
+        {
+            throw new NotImplementedException();
+        }
+        public Task<List<CarPricingViewModel>> GetCarPricingWithTimePeriod1()
+        {
+            var values = new List<CarPricingViewModel>();
 
-        
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText =
+                        @"SELECT * FROM (
+                      SELECT Cars.Model, Brands.Name, Cars.CoverImageUrl, CarPricings.PricingID, CarPricings.Amount
+                      FROM CarPricings
+                      INNER JOIN Cars   ON Cars.CarID   = CarPricings.CarId
+                      INNER JOIN Brands ON Brands.BrandID = Cars.BrandID
+                  ) AS SourceTable
+                  PIVOT (SUM(Amount) FOR PricingID IN ([2],[3],[4])) AS PivotTable;";
+
+                    command.CommandType = System.Data.CommandType.Text;
+
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var vm = new CarPricingViewModel
+                            {
+                                Brand = reader["Name"]?.ToString(),
+                                Model = reader["Model"]?.ToString(),
+                                CoverImageUrl = reader["CoverImageUrl"]?.ToString(),
+                                Amounts = new List<decimal>
+                        {
+                            reader["2"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["2"]),
+                            reader["3"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["3"]),
+                            reader["4"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["4"])
+                        }
+                            };
+                            values.Add(vm);
+                        }
+                    }
+                }
+            }
+
+            return Task.FromResult(values); // <-- kritik kısım
+        }
+
+
     }
 }
 

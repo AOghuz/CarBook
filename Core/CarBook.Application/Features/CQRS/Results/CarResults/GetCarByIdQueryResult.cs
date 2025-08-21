@@ -10,7 +10,9 @@ namespace CarBook.Application.Features.CQRS.Results.CarResults
     {
         public int CarID { get; set; }
         public int BrandID { get; set; }
-        public string Model { get; set; }
+		public string BrandName { get; set; }   // <— eklendi
+
+		public string Model { get; set; }
         public string CoverImageUrl { get; set; }
         public int Km { get; set; }
         public string Transmission { get; set; }

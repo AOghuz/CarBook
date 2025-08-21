@@ -9,35 +9,75 @@ using CarBook.Application.Features.Mediator.Handlers.BlogHandlers;
 using CarBook.Application.Features.RepositoryPattern;
 using CarBook.Application.Interfaces;
 using CarBook.Application.Interfaces.BlogInterfaces;
+using CarBook.Application.Interfaces.CarDescriptionInterfaces;
+using CarBook.Application.Interfaces.CarFeatureInterfaces;
 using CarBook.Application.Interfaces.CarInterfaces;
 using CarBook.Application.Interfaces.CarPricingInterfaces;
+using CarBook.Application.Interfaces.RentACarInterfaces;
+using CarBook.Application.Interfaces.ReviewInterfaces;
+using CarBook.Application.Interfaces.StatisticsInterfaces;
 using CarBook.Application.Interfaces.TagCloudInterfaces;
 using CarBook.Application.Services;
+using CarBook.Application.Tools;
+using CarBook.Application.Validators.ReviewValidators;
 using CarBook.Persistence.Context;
 using CarBook.Persistence.Repositories;
 using CarBook.Persistence.Repositories.BlogRepositories;
+using CarBook.Persistence.Repositories.CarDescriptionRepositories;
+using CarBook.Persistence.Repositories.CarFeatureRepositories;
 using CarBook.Persistence.Repositories.CarPricingRepositories;
 using CarBook.Persistence.Repositories.CarRepositories;
 using CarBook.Persistence.Repositories.CommentRepositories;
+using CarBook.Persistence.Repositories.RentACarRepositories;
+using CarBook.Persistence.Repositories.ReviewRepositories;
+using CarBook.Persistence.Repositories.StatisticsRepositories;
 using CarBook.Persistence.Repositories.TagCloudRepositories;
+using CarBook.WebApi.Controllers;
 
-
+using FluentValidation;                    // <-- eklendi
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;         // <-- kaldý
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false; // dev ortamýnda kapalý olabilir
+        options.SaveToken = true;             // opsiyonel
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidAudience = JwtTokenDefaults.ValidAudience,
+            ValidIssuer = JwtTokenDefaults.ValidIssuer,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(JwtTokenDefaults.Key)
+            ),
+
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+
 builder.Services.AddScoped<CarBookContext>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<IBlogRepository, BlogRepository>();
 builder.Services.AddScoped<ICarPricingRepository, CarPricingRepository>();
 builder.Services.AddScoped<ITagCloudRepository, TagCloudRepository>();
+builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
+builder.Services.AddScoped<IRentACarRepository, RentACarRepository>();
+builder.Services.AddScoped<ICarFeatureRepository, CarFeatureRepository>();
+builder.Services.AddScoped<ICarDescriptionRepository, CarDescriptionRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(CommentRepository<>));
-
-
-
-
-
-
-
 
 // Add services to the container.
 builder.Services.AddScoped<GetAboutQueryHandler>();
@@ -66,7 +106,6 @@ builder.Services.AddScoped<RemoveCarCommandHandler>();
 builder.Services.AddScoped<GetCarWithBrandQueryHandler>();
 builder.Services.AddScoped<GetLast5CarsWithBrandQueryHandler>();
 
-
 builder.Services.AddScoped<GetCategoryQueryHandler>();
 builder.Services.AddScoped<GetCategoryByIdQueryHandler>();
 builder.Services.AddScoped<CreateCategoryCommandHandler>();
@@ -79,17 +118,26 @@ builder.Services.AddScoped<CreateContactCommandHandler>();
 builder.Services.AddScoped<UpdateContactCommandHandler>();
 builder.Services.AddScoped<RemoveContactCommandHandler>();
 
-
 builder.Services.AddApplicationService(builder.Configuration);
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// -------- FluentValidation (yeni stil) --------
+builder.Services.AddControllers(); // tek sefer yeterli
+
+builder.Services
+    .AddFluentValidationAutoValidation()       // auto model validation
+    .AddFluentValidationClientsideAdapters();  // opsiyonel: client-side adaptörleri
+
+// Validator'larý Application katmanýndan tara
+builder.Services.AddValidatorsFromAssembly(typeof(CreateReviewValidator).Assembly);
+// ---------------------------------------------
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// HTTP pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -97,9 +145,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

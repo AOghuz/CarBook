@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using CarBook.Application.Features.RepositoryPattern;
 using CarBook.Domain.Entities;
+using CarBook.Application.Features.Mediator.Commands.CommentCommands;
 
 namespace CarBook.WebApi.Controllers
 {
@@ -68,11 +69,11 @@ namespace CarBook.WebApi.Controllers
             return Ok(value);
         }
 
-        //[HttpPost("CreateCommentWithMediator")]
-        //public async Task<IActionResult> CreateCommentWithMediator(CreateCommentCommand command)
-        //{
-        //    await _mediator.Send(command);
-        //    return Ok("Yorum başarıyla eklendi");
-        //}
+        [HttpPost("CreateCommentWithMediator")]
+        public async Task<IActionResult> CreateCommentWithMediator(CreateCommentCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok("Yorum başarıyla eklendi");
+        }
     }
 }

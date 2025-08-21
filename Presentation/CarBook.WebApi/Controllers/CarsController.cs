@@ -36,14 +36,15 @@ namespace CarBook.WebApi.Controllers
             return Ok(values);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCar(int id)
-        {
-            var value = await _getCarByIdQueryHandler.Handle(new GetCarByIdQuery(id));
-            return Ok(value);
-        }
 
-        [HttpPost]
+		[HttpGet("{id:int}")]
+		public async Task<IActionResult> GetCar(int id, CancellationToken ct)
+		{
+			var value = await _getCarByIdQueryHandler.Handle(new GetCarByIdQuery(id), ct);
+			return value is null ? NotFound() : Ok(value);
+		}
+
+		[HttpPost]
         public async Task<IActionResult> CreateCar(CreateCarCommand command)
         {
             await _createCarCommandHandler.Handle(command);

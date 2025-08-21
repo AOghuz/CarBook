@@ -7,6 +7,7 @@ using CarBook.Application.Features.Mediator.Queries.LocationQueries;
 
 namespace CarBook.WebApi.Controllers
 {
+    [Authorize(Roles ="Admin")]
    
     [Route("api/[controller]")]
     [ApiController]
